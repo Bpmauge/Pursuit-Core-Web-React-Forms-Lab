@@ -3,52 +3,98 @@ import './App.css';
 
 class App extends React.Component {
   constructor() {
-    super()
+    super();
     this.initialState = {
       method: '',
-      text: '',
-      sum:0
-    }
+      input: '',
+      result: ''
+    };
 
     this.state = this.initialState
-  }
-handleNumberChange = (event) => {
-  console.log(`change text`, event.target.value)
-  this.setState({
-    text: event.target.value
-  })
-}
-handleSelectChange = (event) => {
-  console.log(`change select`, event.target.value)
-  this.setState({
-    method: event.target.value
-  })
-}
-handleFormSubmit = (event) => {
-  event.preventDefault();
-  const {text, method, sum } = this.state;
-  let array = text.split(',')
-  if(method === 'sum'){
+  };
+
+  handleNumberChange = (event) => {
+    this.setState({
+      input: event.target.value
+    });
+  };
+  handleSelectChange = (event) => {
+    this.setState({
+      method: event.target.value
+    });
+  };
+
+  handleFormSubmit = (event) => {
+    const { input, method} = this.state;
+    event.preventDefault();
+    if (this.allFieldsValid()) {
+      if (method === 'sum') {
+        this.setState({
+          result: this.addFunction(input)
+        });
+      } else if (method === 'average') {
+        this.setState({
+          result: this.averageFunction(input)
+        });
+      }
+      // } (method === 'mode') {
+        this.setState({
+          result: this.modeFunction(input)
+        });
     
-  array.forEach((number) => { this.setState({
-   sum : sum + parseInt(number) 
-  })
+    };
+  };
 
-  })
+  addFunction = (input) => {
+    let array = input.split(',');
+    let total = array.reduce((total, currentValue) => {
+      return parseInt(total) + parseInt(currentValue);
+    });
+    return (total);
+  };
 
-  }
-console.log(sum)
-}
+  averageFunction = (input) => {
+    let array = input.split(',');
+    let total = array.reduce((total, currentValue) => {
+      return parseInt(total) + parseInt(currentValue);
+    });
+    return (total / array.length);
+  };
+
+  modeFunction = (input) => {
+    let array = input.split(',');
+    let countObj = {};
+    for (let num of array) {
+      if (countObj[num] === undefined) {
+        countObj[num] = 1;
+      } else {
+        countObj[num]++;
+      };
+    };
+    let mostCommonNum = array[0];
+    let mostCommonCount = countObj[mostCommonNum];
+    for (let num in countObj) {
+      if (countObj[num] > mostCommonCount) {
+        mostCommonNum = num;
+        mostCommonCount = countObj[num];
+      };
+    };
+    return parseInt(mostCommonNum);
+  };
+
+  allFieldsValid = () => {
+    return (
+      this.state.input && this.state.method
+    );
+  };
 
   render() {
-    console.log(this.state)
-    const {method} = this.state;
-
+    const { method } = this.state;
     return (
       <div className="App">
         <p>Enter each number in the array, separated by a ','</p>
 
-        <form onSubmit = {this.handleFormSubmit}>
+        <form onSubmit={this.handleFormSubmit}>
           <input type='text'
             onChange={this.handleNumberChange}
           />
@@ -63,11 +109,11 @@ console.log(sum)
             <option value='mode'>mode</option>
           </select>
           <button
-          onChange = {this.handleNumberChange}>Calculate</button>
+            onChange={this.handleNumberChange}>Calculate</button>
         </form>
       </div >
-    )
-  }
+    );
+  };
 }
 
 export default App;
