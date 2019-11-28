@@ -36,12 +36,12 @@ class App extends React.Component {
         this.setState({
           result: this.averageFunction(input)
         });
-      }
-      // } (method === 'mode') {
+      } else{//(method === 'mode') {
         this.setState({
           result: this.modeFunction(input)
         });
-    
+      // }
+    }
     };
   };
 
