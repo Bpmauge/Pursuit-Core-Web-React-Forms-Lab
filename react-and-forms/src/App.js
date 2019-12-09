@@ -89,7 +89,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { method } = this.state;
+    const { method, result } = this.state;
     return (
       <div className="App">
         <p>Enter each number in the array, separated by a ','</p>
@@ -111,6 +111,7 @@ class App extends React.Component {
           <button
             onChange={this.handleNumberChange}>Calculate</button>
         </form>
+        <p>{result}</p>
       </div >
     );
   };
